@@ -55,3 +55,8 @@ _seq()
 	seq "$@"
 	return $?
 }
+
+_stat_size()
+{
+        stat -c %s "$1"
+}

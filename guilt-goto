@@ -1,0 +1,38 @@
+#!/bin/sh
+#
+# Copyright (c) Josef "Jeff" Sipek, 2006-2011
+#
+
+USAGE="<patchname>"
+if [ -z "$GUILT_VERSION" ]; then
+	echo "Invoking $GUILT directly is no longer supported." >&2
+	exit 1
+fi
+
+_main() {
+
+if  [ $# -gt 1 ]; then
+	usage
+fi
+
+patch="$1"
+
+# we're supposed to pop only up to a patch, make sure the patch is
+# in the series
+
+eidx=`get_series | grep -ne "^$patch$" | cut -d: -f 1`
+sidx=`wc -l < "$applied"`
+
+if [ $eidx -eq $sidx ]; then
+	disp "Already at $patch."
+	exit 0
+fi
+
+if [ $sidx -lt $eidx ]; then
+	num=$(($eidx - $sidx))
+	exec guilt push -n $num
+else
+	num=$(($sidx - $eidx))
+	exec guilt pop -n $num
+fi
+}

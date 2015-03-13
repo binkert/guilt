@@ -28,6 +28,8 @@ p=`get_series | awk "{ if (NR == $n) print \\$0}"`
 
 if [ -n "$p" ]; then
 	disp $path$p
+else
+	exit 1
 fi
 
 }

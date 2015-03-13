@@ -1,0 +1,19 @@
+#!/bin/sh
+#
+# Copyright (c) Nathan Binkert, 20013
+#
+
+USAGE=""
+if [ -z "$GUILT_VERSION" ]; then
+	echo "Invoking $GUILT directly is no longer supported." >&2
+	exit 1
+fi
+
+_main() {
+    cd "$GIT_DIR/patches/$branch"
+    while read filename ; do
+        if [ -s "$filename" -a "$filename" != "x#*" ]; then
+            egrep $@ $filename;
+        fi
+    done < series
+}

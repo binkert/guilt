@@ -68,3 +68,8 @@ _seq()
 	)
 	return 0
 }
+
+_stat_size()
+{
+        stat -f %z "$1"
+}

@@ -3,7 +3,7 @@
 # Copyright (c) Josef "Jeff" Sipek, 2006-2013
 #
 
-USAGE="[-v | -g | -e]"
+USAGE="[-v | -g | -e | -f | -p]"
 if [ -z "$GUILT_VERSION" ]; then
 	echo "Invoking `basename "$0"` directly is no longer supported." >&2
 	exit 1
@@ -16,6 +16,10 @@ do
 	case "$1" in
 	-v)
 		verbose=t ;;
+	-f)
+		files=t ;;
+	-p)
+		path=t ;;
 	-g)
 		gui=t ;;
 	-e)
@@ -26,7 +30,14 @@ do
 	shift
 done
 
-if [ ! -z "$edit" ]; then 
+if [ ! -z "$path" ]; then
+    echo "$GIT_DIR/patches/$branch/series"
+elif [ ! -z "$files" ]; then
+	get_full_series |
+	while read patch; do
+		echo "$GIT_DIR/patches/$branch/$patch"
+	done
+elif [ ! -z "$edit" ]; then
 	git_editor "$series"
 elif [ ! -z "$gui" ]; then
 	[ -z "`get_top`" ] && die "No patches applied."

@@ -117,8 +117,11 @@ if [ "$sidx" -gt "$eidx" ]; then
 	fi
 fi
 
-get_series | sed -n -e "${sidx},${eidx}p" | while read p
+NUM_APPLIED=0
+SERIES=`get_series | sed -n -e "${sidx},${eidx}p"`
+for p in $SERIES
 do
+	NUM_APPLIED=$(($NUM_APPLIED + 1))
 	disp "Applying patch..$p"
 	if [ ! -f "$GUILT_DIR/$branch/$p" ]; then
 		die "Patch $p does not exist. Aborting."
@@ -135,5 +138,9 @@ do
 		die "To force apply this patch, use 'guilt push -f'"
 	fi
 done
+
+if [ $NUM_APPLIED -eq 0 ]; then
+    exit 1
+fi
 
 }
