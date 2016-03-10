@@ -792,6 +792,8 @@ __refresh_patch()
 		# get the patch header
 		do_get_full_header "$p" > "$TMP_DIFF"
 
+		guilt_hook "refresh-msg" "$TMP_DIFF"
+
 		[ ! -z "$4" ] && diffopts="-C -M --find-copies-harder"
 		
 		if [ -n "$5" -o $diffstat = "true" ]; then
