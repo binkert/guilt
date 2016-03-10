@@ -13,7 +13,7 @@ _main() {
     cd "$GIT_DIR/patches/$branch"
     while read filename ; do
         if [ -s "$filename" -a "$filename" != "x#*" ]; then
-            egrep $@ $filename;
+            egrep "$@" $filename;
         fi
     done < series
 }
